@@ -180,12 +180,17 @@ namespace NReco.Linq {
 			}
 		}
 
-		public static LambdaParameterWrapper operator +(LambdaParameterWrapper c1, LambdaParameterWrapper c2) {
-			if (c1.Value is string || c2.Value is string) {
-            if (c1.Value is string || c2.Value is string)
+        public static LambdaParameterWrapper operator +(LambdaParameterWrapper c1, LambdaParameterWrapper c2)
+        {
+            if (c1.Value == null && c2.Value == null)
+            {
+                return null;
+            }
+			else if (c1.Value is string || c2.Value is string)
             {
                 return new LambdaParameterWrapper(Convert.ToString(c1.Value) + Convert.ToString(c2.Value));
             }
+             
             else if (c1.Value is TimeSpan || c2.Value is TimeSpan)
             {
                 var c1TimeSpan = c1.Value as TimeSpan?;
@@ -200,7 +205,8 @@ namespace NReco.Linq {
             }
         }
 
-		public static LambdaParameterWrapper operator -(LambdaParameterWrapper c1, LambdaParameterWrapper c2) {
+        public static LambdaParameterWrapper operator -(LambdaParameterWrapper c1, LambdaParameterWrapper c2)
+        {
             if (c1.Value is DateTime || c2.Value is DateTime)
             {
                 var c1DateTime = Convert.ToDateTime(c1.Value, CultureInfo.InvariantCulture);
