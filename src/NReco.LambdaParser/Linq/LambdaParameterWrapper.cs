@@ -182,19 +182,44 @@ namespace NReco.Linq {
 
 		public static LambdaParameterWrapper operator +(LambdaParameterWrapper c1, LambdaParameterWrapper c2) {
 			if (c1.Value is string || c2.Value is string) {
-				return new LambdaParameterWrapper( Convert.ToString(c1.Value) + Convert.ToString(c2.Value));
-			} else {
-				var c1decimal = Convert.ToDecimal(c1.Value, CultureInfo.InvariantCulture);
-				var c2decimal = Convert.ToDecimal(c2.Value,  CultureInfo.InvariantCulture);
-				return new LambdaParameterWrapper(c1decimal + c2decimal);
-			}
-		}
+            if (c1.Value is string || c2.Value is string)
+            {
+                return new LambdaParameterWrapper(Convert.ToString(c1.Value) + Convert.ToString(c2.Value));
+            }
+            else if (c1.Value is TimeSpan || c2.Value is TimeSpan)
+            {
+                var c1TimeSpan = c1.Value as TimeSpan?;
+                var c2TimeSpan = c2.Value as TimeSpan?;
+                return new LambdaParameterWrapper(c1TimeSpan + c2TimeSpan);
+            }
+            else
+            {
+                var c1decimal = Convert.ToDecimal(c1.Value, CultureInfo.InvariantCulture);
+                var c2decimal = Convert.ToDecimal(c2.Value, CultureInfo.InvariantCulture);
+                return new LambdaParameterWrapper(c1decimal + c2decimal);
+            }
+        }
 
 		public static LambdaParameterWrapper operator -(LambdaParameterWrapper c1, LambdaParameterWrapper c2) {
-			var c1decimal = Convert.ToDecimal(c1.Value, CultureInfo.InvariantCulture);
-			var c2decimal = Convert.ToDecimal(c2.Value, CultureInfo.InvariantCulture);
-			return new LambdaParameterWrapper(c1decimal - c2decimal);
-		}
+            if (c1.Value is DateTime || c2.Value is DateTime)
+            {
+                var c1DateTime = Convert.ToDateTime(c1.Value, CultureInfo.InvariantCulture);
+                var c2DateTime = Convert.ToDateTime(c2.Value, CultureInfo.InvariantCulture);
+                return new LambdaParameterWrapper(c1DateTime - c2DateTime);
+            }
+            else if (c1.Value is TimeSpan || c2.Value is TimeSpan)
+            {
+                var c1TimeSpan = c1.Value as TimeSpan?;
+                var c2TimeSpan = c2.Value as TimeSpan?;
+                return new LambdaParameterWrapper(c1TimeSpan - c2TimeSpan);
+            }
+            else
+            {
+                var c1decimal = Convert.ToDecimal(c1.Value, CultureInfo.InvariantCulture);
+                var c2decimal = Convert.ToDecimal(c2.Value, CultureInfo.InvariantCulture);
+                return new LambdaParameterWrapper(c1decimal - c2decimal);
+            }
+        }
 
 		public static LambdaParameterWrapper operator -(LambdaParameterWrapper c1) {
 			var c1decimal = Convert.ToDecimal(c1.Value, CultureInfo.InvariantCulture);

@@ -22,7 +22,10 @@ namespace NReco.Tests.Linq {
 			varContext["two"] = 2M;
 			varContext["test"] = "test";
 			varContext["now"] = DateTime.Now;
-			varContext["testObj"] = new TestClass();
+            varContext["yesterday"] = DateTime.Now.AddDays(-1);
+            varContext["timespan"] = new TimeSpan(2, 0, 5);
+            varContext["timespan2"] = new TimeSpan(45, 0, 5);
+            varContext["testObj"] = new TestClass();
 			varContext["arr1"] = new double[] { 1.5, 2.5 };
 			varContext["NOT"] = (Func<bool,bool>)( (t) => !t );
 			varContext["Yes"] = true;
@@ -48,7 +51,19 @@ namespace NReco.Tests.Linq {
 
 			Assert.AreEqual(2.14, lambdaParser.Eval("pi + -one", varContext) );
 
-			Assert.AreEqual("test1", lambdaParser.Eval("test + \"1\"", varContext) );
+            Assert.AreEqual(true, lambdaParser.Eval("now > yesterday", varContext));
+
+            Assert.AreEqual(false, lambdaParser.Eval("now <= yesterday", varContext));
+
+            Assert.AreEqual(new TimeSpan(24, 0, 0), lambdaParser.Eval("now - yesterday", varContext));
+
+            Assert.AreEqual("diff= 1.00:00:00", lambdaParser.Eval("\"diff= \" + (now - yesterday)", varContext));
+
+            Assert.AreEqual(new TimeSpan(26, 0, 5), lambdaParser.Eval("now - yesterday + timespan", varContext));
+
+            Assert.AreEqual(true, lambdaParser.Eval("now - yesterday + timespan <= timespan2", varContext));
+
+            Assert.AreEqual("test1", lambdaParser.Eval("test + \"1\"", varContext) );
 
 			Assert.AreEqual("a_b_a_b", lambdaParser.Eval(" name_with_underscore + _name_with_underscore ", varContext));
 
